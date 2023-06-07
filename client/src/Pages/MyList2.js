@@ -11,9 +11,25 @@ export default function MyList() {
         setGoals((currentGoals) => {
             return [...currentGoals, { id: crypto.randomUUID(), title: newItem, completed: false }];
         });
+        setNewItem("");
     }
 
-    console.log(goals);
+    function toggleGoal(id, completed) {
+        setGoals((currentGoals) => {
+            return currentGoals.map((goal) => {
+                if (goal.id === id) {
+                    return { ...goal, completed };
+                }
+                return goal;
+            });
+        });
+    }
+
+    function deleteGoal(id) {
+        setGoals((currentGoals) => {
+            return currentGoals.filter((goal) => goal.id !== id);
+        });
+    }
 
     return (
         <div className="list-container">
@@ -24,20 +40,31 @@ export default function MyList() {
                         onChange={(event) => setNewItem(event.target.value)}
                         type="text"
                         id="item"
-                        placeholder="Add a goal"
+                        placeholder="Add to your list..."
                     ></input>
                 </div>
-                <button className="btn">Add</button>
+                <button className="btn btn-add">Go</button>
             </form>
             <h2 className="header">My List</h2>
             <ul className="list">
-                <li>
-                    <label>
-                        <input type="checkbox" />
-                        Item 1
-                    </label>
-                    <button className="btn btn-delete">Delete</button>
-                </li>
+                {goals.length === 0 && "no list items yet"}
+                {goals.map((goal) => {
+                    return (
+                        <li key={goal.id}>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={goal.completed}
+                                    onChange={(event) => toggleGoal(goal.id, event.target.checked)}
+                                />
+                                {goal.title}
+                            </label>
+                            <button className="btn btn-delete" onClick={() => deleteGoal(goal.id)}>
+                                Delete
+                            </button>
+                        </li>
+                    );
+                })}
             </ul>
         </div>
     );
