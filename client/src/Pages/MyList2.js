@@ -57,8 +57,9 @@ export default function MyList() {
                                     checked={goal.completed}
                                     onChange={(event) => toggleGoal(goal.id, event.target.checked)}
                                 />
-                                {goal.title}
+                                <span className="text">{goal.title}</span>
                             </label>
+                            <button className="btn btn-edit"> Edit </button>
                             <button className="btn btn-delete" onClick={() => deleteGoal(goal.id)}>
                                 Delete
                             </button>
